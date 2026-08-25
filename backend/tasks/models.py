@@ -6,6 +6,11 @@ class Task(models.Model):
         PENDIENTE = "pendiente", "Pendiente"
         COMPLETADO = "completado", "Completado"
 
+    class Category(models.TextChoices):
+        SIN_CLASIFICAR = "sin_clasificar", "Sin clasificar"
+        URGENTE = "urgente", "Urgente"
+        NO_URGENTE = "no_urgente", "No urgente"
+
     titulo = models.CharField(max_length=200)
 
     descripcion = models.TextField()
@@ -18,7 +23,8 @@ class Task(models.Model):
 
     categoria = models.CharField(
         max_length=50,
-        blank=True,
+        choices=Category.choices,
+        default=Category.SIN_CLASIFICAR,
     )
 
     created_at = models.DateTimeField(
