@@ -45,3 +45,11 @@ export const analyzeTask = async (id) => {
   const task = await request(`/tasks/${id}/analyze/`, { method: "POST" });
   return mapTask(task);
 };
+
+export const updateTaskStatus = async (id, status) => {
+  const task = await request(`/tasks/${id}/`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+  });
+  return mapTask(task);
+};

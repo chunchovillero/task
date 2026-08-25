@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { analyzeTask, createTask, getTasks } from "./api/tasks.js";
+import { analyzeTask, createTask, getTasks, updateTaskStatus } from "./api/tasks.js";
 
 const INITIAL_FORM = { title: "", description: "" };
 
@@ -10,6 +10,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [analyzingId, setAnalyzingId] = useState(null);
+  const [updatingId, setUpdatingId] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -71,6 +72,25 @@ export default function App() {
     }
   };
 
+  const handleStatusChange = async (task) => {
+    setUpdatingId(task.id);
+    setError("");
+    const nextStatus = task.status === "pending" ? "completed" : "pending";
+
+    try {
+      const updatedTask = await updateTaskStatus(task.id, nextStatus);
+      setTasks((currentTasks) =>
+        currentTasks.map((currentTask) =>
+          currentTask.id === task.id ? updatedTask : currentTask,
+        ),
+      );
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
   return (
     <main className="page-shell">
       <header className="hero">
@@ -128,9 +148,11 @@ export default function App() {
           ) : (
             <div className="task-list">
               {tasks.map((task) => (
-                <article className="task-card" key={task.id}>
+                <article className={`task-card ${task.status === "completed" ? "completed" : ""}`} key={task.id}>
                   <div className="task-card-header">
-                    <span className="status-badge">{task.status}</span>
+                    <span className="status-badge">
+                      {task.status === "completed" ? "Completada" : "Pendiente"}
+                    </span>
                     <span className="task-id">#{String(task.id).padStart(4, "0")}</span>
                   </div>
                   <h3>{task.title}</h3>
@@ -150,6 +172,18 @@ export default function App() {
                       onClick={() => handleAnalyze(task.id)}
                     >
                       {analyzingId === task.id ? "Analizando..." : "Analizar urgencia"}
+                    </button>
+                    <button
+                      className="status-button"
+                      type="button"
+                      disabled={updatingId === task.id}
+                      onClick={() => handleStatusChange(task)}
+                    >
+                      {updatingId === task.id
+                        ? "Actualizando..."
+                        : task.status === "completed"
+                          ? "Reabrir"
+                          : "Completar"}
                     </button>
                   </div>
                 </article>
