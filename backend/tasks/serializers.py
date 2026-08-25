@@ -16,5 +16,6 @@ class TaskSerializer(serializers.ModelSerializer):
 
         read_only_fields = [
             "id",
+            "categoria",
             "created_at",
         ]

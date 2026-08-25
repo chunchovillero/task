@@ -40,3 +40,8 @@ export const createTask = async ({ title, description }) => {
 
   return mapTask(task);
 };
+
+export const analyzeTask = async (id) => {
+  const task = await request(`/tasks/${id}/analyze/`, { method: "POST" });
+  return mapTask(task);
+};

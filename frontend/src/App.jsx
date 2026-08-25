@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { createTask, getTasks } from "./api/tasks.js";
+import { analyzeTask, createTask, getTasks } from "./api/tasks.js";
 
 const INITIAL_FORM = { title: "", description: "" };
 
@@ -9,6 +9,7 @@ export default function App() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [analyzingId, setAnalyzingId] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -51,6 +52,22 @@ export default function App() {
       setError(requestError.message);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleAnalyze = async (taskId) => {
+    setAnalyzingId(taskId);
+    setError("");
+
+    try {
+      const analyzedTask = await analyzeTask(taskId);
+      setTasks((currentTasks) =>
+        currentTasks.map((task) => task.id === taskId ? analyzedTask : task),
+      );
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setAnalyzingId(null);
     }
   };
 
@@ -118,6 +135,23 @@ export default function App() {
                   </div>
                   <h3>{task.title}</h3>
                   <p>{task.description}</p>
+                  <div className="task-actions">
+                    <span className={`category-badge ${task.category}`}>
+                      {task.category === "urgente"
+                        ? "Urgente"
+                        : task.category === "no_urgente"
+                          ? "No urgente"
+                          : "Sin clasificar"}
+                    </span>
+                    <button
+                      className="ai-button"
+                      type="button"
+                      disabled={analyzingId === task.id}
+                      onClick={() => handleAnalyze(task.id)}
+                    >
+                      {analyzingId === task.id ? "Analizando..." : "Analizar urgencia"}
+                    </button>
+                  </div>
                 </article>
               ))}
             </div>
