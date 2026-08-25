@@ -40,7 +40,18 @@ class UrgencyAgent:
     def analyze(self, title: str, description: str) -> UrgencyAnalysis:
         if settings.AI_FAKE_MODE:
             text = f"{title} {description}".lower()
-            urgent_words = ("urgente", "hoy", "mañana", "inmediato", "vencimiento")
+            urgent_words = (
+                "urgente",
+                "hoy",
+                "mañana",
+                "inmediato",
+                "vencimiento",
+                "urgent",
+                "today",
+                "tomorrow",
+                "immediate",
+                "deadline",
+            )
             return UrgencyAnalysis(urgent=any(word in text for word in urgent_words))
 
         agent = self._agent or self._build_agent()

@@ -3,28 +3,28 @@ from django.db import models
 
 class Task(models.Model):
     class Status(models.TextChoices):
-        PENDIENTE = "pendiente", "Pendiente"
-        COMPLETADO = "completado", "Completado"
+        PENDING = "pending", "Pendiente"
+        COMPLETED = "completed", "Completado"
 
     class Category(models.TextChoices):
-        SIN_CLASIFICAR = "sin_clasificar", "Sin clasificar"
-        URGENTE = "urgente", "Urgente"
-        NO_URGENTE = "no_urgente", "No urgente"
+        UNCLASSIFIED = "unclassified", "Sin clasificar"
+        URGENT = "urgent", "Urgente"
+        NOT_URGENT = "not_urgent", "No urgente"
 
-    titulo = models.CharField(max_length=200)
+    title = models.CharField(max_length=200)
 
-    descripcion = models.TextField()
+    description = models.TextField()
 
-    estado = models.CharField(
+    status = models.CharField(
         max_length=20,
         choices=Status.choices,
-        default=Status.PENDIENTE,
+        default=Status.PENDING,
     )
 
-    categoria = models.CharField(
+    category = models.CharField(
         max_length=50,
         choices=Category.choices,
-        default=Category.SIN_CLASIFICAR,
+        default=Category.UNCLASSIFIED,
     )
 
     created_at = models.DateTimeField(
@@ -32,4 +32,4 @@ class Task(models.Model):
     )
 
     def __str__(self):
-        return self.titulo
+        return self.title
