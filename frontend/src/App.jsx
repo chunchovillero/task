@@ -1,26 +1,57 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { createTask, getTasks } from "./api/tasks.js";
 
 const INITIAL_FORM = { title: "", description: "" };
 
 export default function App() {
   const [form, setForm] = useState(INITIAL_FORM);
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+
+    getTasks()
+      .then((storedTasks) => {
+        if (active) setTasks(storedTasks);
+      })
+      .catch((requestError) => {
+        if (active) setError(requestError.message);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setForm((currentForm) => ({ ...currentForm, [name]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const newTask = {
-      id: crypto.randomUUID(),
-      title: form.title.trim(),
-      description: form.description.trim(),
-      status: "Pendiente",
-    };
-    setTasks((currentTasks) => [newTask, ...currentTasks]);
-    setForm(INITIAL_FORM);
+    setSaving(true);
+    setError("");
+
+    try {
+      const newTask = await createTask({
+        title: form.title.trim(),
+        description: form.description.trim(),
+      });
+      setTasks((currentTasks) => [newTask, ...currentTasks]);
+      setForm(INITIAL_FORM);
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -55,7 +86,11 @@ export default function App() {
               <span className="field-help">Agrega el contexto necesario</span>
             </div>
 
-            <button className="primary-button" type="submit">Crear tarea</button>
+            {error && <p className="error-message" role="alert">{error}</p>}
+
+            <button className="primary-button" type="submit" disabled={saving}>
+              {saving ? "Guardando..." : "Crear tarea"}
+            </button>
           </form>
         </section>
 
@@ -65,7 +100,9 @@ export default function App() {
             <span className="task-count">{tasks.length} tareas</span>
           </div>
 
-          {tasks.length === 0 ? (
+          {loading ? (
+            <p className="loading-state">Cargando tareas...</p>
+          ) : tasks.length === 0 ? (
             <div className="empty-state">
               <span aria-hidden="true">✓</span>
               <h3>Todo está al día</h3>
@@ -77,7 +114,7 @@ export default function App() {
                 <article className="task-card" key={task.id}>
                   <div className="task-card-header">
                     <span className="status-badge">{task.status}</span>
-                    <span className="task-id">#{task.id.slice(0, 4)}</span>
+                    <span className="task-id">#{String(task.id).padStart(4, "0")}</span>
                   </div>
                   <h3>{task.title}</h3>
                   <p>{task.description}</p>

@@ -24,10 +24,13 @@ textarea { resize: vertical; }
 .field-help { color: #687b92; font-size: .7rem; }
 .primary-button { width: 100%; border: 0; border-radius: 10px; color: #061510; background: #5ee6bf; padding: 13px 18px; cursor: pointer; font-weight: 850; transition: transform 160ms ease, background 160ms ease; }
 .primary-button:hover { background: #78edcc; transform: translateY(-1px); }
+.primary-button:disabled { cursor: wait; opacity: .65; transform: none; }
+.error-message { margin: 0 0 16px; border: 1px solid rgba(255, 102, 116, .35); border-radius: 9px; color: #ffb2b9; background: rgba(180, 37, 52, .13); padding: 11px 13px; font-size: .8rem; }
 .tasks-heading { align-items: center; }
 .task-count, .status-badge { border-radius: 999px; font-size: .7rem; font-weight: 800; }
 .task-count { color: #93a4b8; background: rgba(5, 15, 29, .62); padding: 7px 10px; }
 .empty-state { display: grid; place-items: center; min-height: 300px; color: #73869d; text-align: center; }
+.loading-state { min-height: 300px; margin: 0; color: #73869d; display: grid; place-items: center; }
 .empty-state span { display: grid; width: 46px; height: 46px; border: 1px solid rgba(94, 230, 191, .25); border-radius: 50%; place-items: center; color: #5ee6bf; background: rgba(94, 230, 191, .07); font-size: 1.25rem; }
 .empty-state h3 { margin: 18px 0 6px; color: #c5d0dd; }
 .empty-state p { max-width: 280px; margin: 0; font-size: .85rem; }
