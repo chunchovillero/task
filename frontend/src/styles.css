@@ -43,8 +43,8 @@ textarea { resize: vertical; }
 .task-card p { margin: 0; color: #93a4b8; font-size: .88rem; line-height: 1.55; }
 .task-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 18px; }
 .category-badge { border-radius: 999px; color: #9cacc0; background: #1b2b3e; padding: 5px 9px; font-size: .68rem; font-weight: 800; text-transform: uppercase; }
-.category-badge.urgente { color: #ff9a9a; background: rgba(222, 62, 81, .17); }
-.category-badge.no_urgente { color: #80edcd; background: rgba(32, 172, 133, .15); }
+.category-badge.urgent { color: #ff9a9a; background: rgba(222, 62, 81, .17); }
+.category-badge.not_urgent { color: #80edcd; background: rgba(32, 172, 133, .15); }
 .ai-button { border: 1px solid rgba(94, 230, 191, .28); border-radius: 8px; color: #79e8c8; background: rgba(29, 142, 113, .09); padding: 8px 11px; cursor: pointer; font-size: .75rem; font-weight: 800; }
 .ai-button:disabled { cursor: wait; opacity: .65; }
 @media (max-width: 780px) { .page-shell { width: min(100% - 24px, 620px); padding: 40px 0; } .workspace { grid-template-columns: 1fr; } .form-panel { position: static; } }

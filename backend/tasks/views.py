@@ -21,7 +21,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         task = self.get_object()
 
         try:
-            analysis = analyze_urgency(task.titulo, task.descripcion)
+            analysis = analyze_urgency(task.title, task.description)
         except AgentConfigurationError as exc:
             return Response({"detail": str(exc)}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
         except Exception:
@@ -31,8 +31,8 @@ class TaskViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_502_BAD_GATEWAY,
             )
 
-        task.categoria = (
-            Task.Category.URGENTE if analysis.urgent else Task.Category.NO_URGENTE
+        task.category = (
+            Task.Category.URGENT if analysis.urgent else Task.Category.NOT_URGENT
         )
-        task.save(update_fields=["categoria"])
+        task.save(update_fields=["category"])
         return Response(self.get_serializer(task).data)

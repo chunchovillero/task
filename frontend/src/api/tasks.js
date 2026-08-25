@@ -2,10 +2,10 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 
 const mapTask = (task) => ({
   id: task.id,
-  title: task.titulo,
-  description: task.descripcion,
-  status: task.estado,
-  category: task.categoria,
+  title: task.title,
+  description: task.description,
+  status: task.status,
+  category: task.category,
   createdAt: task.created_at,
 });
 
@@ -33,8 +33,8 @@ export const createTask = async ({ title, description }) => {
   const task = await request("/tasks/", {
     method: "POST",
     body: JSON.stringify({
-      titulo: title,
-      descripcion: description,
+      title,
+      description,
     }),
   });
 

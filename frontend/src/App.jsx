@@ -137,9 +137,9 @@ export default function App() {
                   <p>{task.description}</p>
                   <div className="task-actions">
                     <span className={`category-badge ${task.category}`}>
-                      {task.category === "urgente"
+                      {task.category === "urgent"
                         ? "Urgente"
-                        : task.category === "no_urgente"
+                        : task.category === "not_urgent"
                           ? "No urgente"
                           : "Sin clasificar"}
                     </span>
