@@ -1,6 +1,10 @@
 node_modules/
 dist/
 .env
+.venv/
+__pycache__/
+*.py[cod]
+db.sqlite3
 .idea/
 .vscode/
 .DS_Store
