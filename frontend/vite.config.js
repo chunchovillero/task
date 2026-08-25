@@ -9,7 +9,7 @@ export default defineConfig({
       interval: 300,
     },
     host: "0.0.0.0",
-    port: 76,
+    port: 5173,
     strictPort: true,
   },
 });
